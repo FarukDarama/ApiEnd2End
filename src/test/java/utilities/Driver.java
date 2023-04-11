@@ -2,6 +2,8 @@ package utilities;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -36,10 +38,6 @@ public class Driver {
                     WebDriverManager.firefoxdriver().setup();
                     driver = new FirefoxDriver();
                     break;
-                case "opera":
-                    WebDriverManager.operadriver().setup();
-                    driver = new OperaDriver();
-                    break;
                 case "edge":
                     WebDriverManager.edgedriver().setup();
                     driver = new EdgeDriver();
@@ -62,5 +60,16 @@ public class Driver {
         // burada yeniden null degeri atamamizin sebebi. bir sonraki getDriver method'u cagirisimizda
         // yeni deger atayabilmek istememizdir.
         driver=null;
+    }
+
+    public void waitAndClick(WebElement element, int timeout) throws InterruptedException {
+        for (int i = 0; i < timeout; i++) {
+            try {
+                element.click();
+                return;
+            } catch (WebDriverException e) {
+                wait(1);
+            }
+        }
     }
 }
